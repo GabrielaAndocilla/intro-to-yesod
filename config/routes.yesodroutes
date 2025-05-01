@@ -8,7 +8,7 @@
 /robots.txt RobotsR GET
 
 / HomeR GET POST
--- /widgets WidgetsTestR GET
+/widgets WidgetsTestR GET
 
 /comments CommentR POST
 

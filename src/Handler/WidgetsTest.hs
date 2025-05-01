@@ -39,4 +39,8 @@ getWidgetsTestR = defaultLayout $ do
         [julius|
             alert("This is included in the body itself");
         |]
+    toWidgetBody
+        [hamlet|<script src=/included-in-body.js>|]
+    toWidgetHead
+        [hamlet|<script src=/included-in-head.js>|]
 
