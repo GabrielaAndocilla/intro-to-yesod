@@ -9,8 +9,6 @@
 module Handler.WidgetsTest where
 
 import Import
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
-import Text.Julius (RawJS (..))
 
 
 getWidgetsTestR :: Handler Html
@@ -43,4 +41,3 @@ getWidgetsTestR = defaultLayout $ do
         [hamlet|<script src=/included-in-body.js>|]
     toWidgetHead
         [hamlet|<script src=/included-in-head.js>|]
-

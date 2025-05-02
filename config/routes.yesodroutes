@@ -13,3 +13,7 @@
 /comments CommentR POST
 
 /profile ProfileR GET
+
+/forms ExampleFormsR GET
+/forms-applicative ExampleFormsApplicativeR POST
+/forms-monad ExampleFormsMonadR POST

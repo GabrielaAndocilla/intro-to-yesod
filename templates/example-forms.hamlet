@@ -1,0 +1,34 @@
+<div .ui.container>
+    <h1>Example Forms
+
+    <h3>Applicative Form
+    <form method="post" action=@{ExampleFormsApplicativeR} enctype=#{enctypeA}>
+       ^{widgetApplicative}
+       <button type="submit">Submit</button>
+
+    $maybe person <- mPerson
+        <h3>Datos enviados:
+        <ul>
+            <li>Nombre: #{personName person}
+            <li>Edad: #{personAge person}
+            <li>Email: #{personEmail person}
+            $maybe pet <- personPet person
+                <li>Mascota: #{show pet}
+            $nothing
+                <li>Mascota: No seleccionada
+
+    <h3>Monad Form
+    <form method="post" action=@{ExampleFormsMonadR} enctype=#{enctypeM}>
+        ^{widgetMonad}
+        <button type="submit">Submit</button>
+
+    $maybe course <- mCourse
+        <h3>Datos enviados:
+        <ul>
+            <li>Nombre: #{courseName course}
+            <li>Tipo: #{show (courseType course)}
+            <li>Descripción: #{courseDescription course}
+            $maybe credits <- courseCredits course
+                <li>Créditos: #{show credits}
+            $nothing
+                <li>Créditos: No seleccionados
