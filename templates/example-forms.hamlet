@@ -2,7 +2,7 @@
     <h1>Example Forms
 
     <h3>Applicative Form
-    <form method="post" action=@{ExampleFormsApplicativeR} enctype=#{enctypeA}>
+    <form method="post" action=@{ExampleFormsR} enctype=#{enctypeA}>
        ^{widgetApplicative}
        <button type="submit">Submit</button>
 
@@ -18,7 +18,7 @@
                 <li>Mascota: No seleccionada
 
     <h3>Monad Form
-    <form method="post" action=@{ExampleFormsMonadR} enctype=#{enctypeM}>
+    <form method="post" action=@{ExampleFormsR} enctype=#{enctypeM}>
         ^{widgetMonad}
         <button type="submit">Submit</button>
 

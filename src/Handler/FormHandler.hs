@@ -11,8 +11,6 @@ module Handler.FormHandler where
 import Import
 import Data.Text as Text
 import Text.Read (readMaybe)
-import Yesod.Form.Types
-import Yesod.Form.Functions
 
 data Person = Person
     { personName :: Text
@@ -53,19 +51,19 @@ registerToCourseForm extra = do
     (nameRes, nameView) <- mreq textField nameSettings Nothing
     (typeRes, typeView) <- mreq (selectFieldList courseTypeOptions) typeSettings Nothing
     (descRes, descView) <- mreq textField descSettings Nothing
-
     (creditRes, creditView) <- case typeRes of
-        FormSuccess Onsite -> mopt intField creditSettings Nothing
+        FormSuccess Onsite -> do
+            mopt intField creditSettings Nothing
         _ -> do
-              let emptyView = FieldView
-                    { fvId = "no-credits"
-                    , fvLabel = "Credits"
-                    , fvTooltip = Nothing
-                    , fvInput = return ()
-                    , fvErrors = Nothing
-                    , fvRequired = False
-                    }
-              return (FormSuccess Nothing, emptyView)
+            let emptyView = FieldView
+                  { fvId = "no-credits"
+                  , fvLabel = "Credits"
+                  , fvTooltip = Nothing
+                  , fvInput = return ()
+                  , fvErrors = Nothing
+                  , fvRequired = False
+                  }
+            return (FormSuccess Nothing, emptyView)
 
     let courseResult = case (nameRes, typeRes, descRes) of
             (FormSuccess name, FormSuccess typ, FormSuccess desc) ->
@@ -152,27 +150,35 @@ getExampleFormsR = do
         setTitle "Example Forms"
         $(widgetFile "example-forms")
 
-postExampleFormsApplicativeR :: Handler Html
-postExampleFormsApplicativeR = do
+postExampleFormsR :: Handler Html
+postExampleFormsR = do
     ((personResult, widgetApplicative), enctypeA) <- runFormPost personAForm
+    ((courseResult, widgetMonad), enctypeM) <- runFormPost registerToCourseForm
 
-    mCourseSession <- lookupSession "courseData"
-    let mCourse = mCourseSession >>= readCourseFromSession
+    -- mPersonSession <- lookupSession "personData"
+    -- let mPerson = mPersonSession >>= readPersonFromSession
+    -- mCourseSession <- lookupSession "courseData"
+    -- let mCourse = mCourseSession >>= readCourseFromSession
 
-    (widgetMonad, enctypeM) <- generateFormPost registerToCourseForm
-
-    case personResult of
-        FormSuccess person -> do
+    case (personResult,courseResult) of
+        (FormSuccess person, _ ) -> do
             setSession "personData" (Text.pack $ show person)
-
             defaultLayout $ do
                 setTitle "Example Forms"
                 let mPerson = Just person
+                    mCourse = Nothing
                 $(widgetFile "example-forms")
-
+        (_, FormSuccess course) -> do
+            setSession "courseData" (Text.pack $ show course)
+            defaultLayout $ do
+                setTitle "Example Forms"
+                let mCourse = Just course
+                    mPerson = Nothing
+                $(widgetFile "example-forms")
         _ -> defaultLayout $ do
             setTitle "Example Forms"
             let mPerson = Nothing :: Maybe Person
+            let mCourse = Nothing :: Maybe Course
             $(widgetFile "example-forms")
 
 postExampleFormsMonadR :: Handler Html
